@@ -11,7 +11,7 @@ Client::~Client()
 }
 int Client::onRecv(const char * buf, const int buflen)
 {
-	if (this->getMode() != MESSAGE_TYPE_RAW){
+	if (this->_mode!= MESSAGE_TYPE_RAW){
 		if (buflen < 4) return 0;
 		uint8_t lv = (uint8_t)buf[0];
 		uint8_t hv = (uint8_t)buf[1];
@@ -252,6 +252,18 @@ static int londisconnect(lua_State * L){
 	return 0;
 }
 
+static int lsetmode(lua_State * L){
+	int num = lua_gettop(L);
+	if (num != 2) return 0;
+	IocpSocketServer * iocp = (IocpSocketServer *)lua_touserdata(L, 1);
+	int fd = (int)lua_tointeger(L, 2);
+	int mode = (int)lua_tointeger(L, 3);
+	CustomSocketContext *client = iocp->getSocket(fd);
+	if (!client) return 0;
+	client->_mode = mode;
+	return 0;
+}
+
 int luaopen_iocpsocket(lua_State *L){
 	luaL_checkversion(L);
 	luaL_Reg l[] = {
@@ -267,7 +279,7 @@ int luaopen_iocpsocket(lua_State *L){
 		{ "poll", lpoll},
 		{ "getsocketaddr", lgetsocketaddr},
 		{ "onaccept", lonaccept },
-		
+		{ "setmode", lsetmode },
 		{ "ondisconnect", londisconnect },
 		{ NULL, NULL },
 	};

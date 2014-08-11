@@ -67,12 +67,12 @@ class CustomSocketContext;
 		char _recvbuf[MAX_CLIENT_BUFLEN];
 		int _recvbuflen;
 		unsigned long _lock;
-		int _mode;
 		void doRecv(const char * buf, const int buflen);
 	protected:
 		virtual int onRecv(const char * buf, const int buflen) = 0;
 	public:
 		CustomIocpSocketServer *_server;
+		int _mode;
 		void reset()
 		{
 			socket = 0;
@@ -84,13 +84,13 @@ class CustomSocketContext;
 			_sending = false;
 			_sendCount = 0;
 		    _recvbuflen = 0;
+			_mode = -1;
 		}
 		virtual ~CustomSocketContext(){ closeSocket();};
 		bool Send(const char * buf, uint16_t buflen, uint16_t type);
 		void doSend(IoContext *ioctx);
 		int getId(){ return _id; }
 		char * getAddr() {return _addrs;}
-		int getMode(){ return _mode; }
 		void closeSocket(){ if (socket) closesocket(socket);}
 		friend  class CustomIocpSocketServer;
 	};

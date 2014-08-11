@@ -10,7 +10,7 @@
 bool CustomSocketContext::Send(const char * buf, uint16_t buflen, uint16_t type)
 {
 	SendBuffer * sb = new SendBuffer;
-	if (type != MESSAGE_TYPE_RAW){
+	if (_mode != MESSAGE_TYPE_RAW){
 		sb->buf = new char[buflen + 4];
 		uint8_t lv = (uint8_t)buflen;
 		uint8_t hv = (uint16_t)buflen >> 8;
@@ -28,7 +28,6 @@ bool CustomSocketContext::Send(const char * buf, uint16_t buflen, uint16_t type)
 		sb->buflen = buflen;
 		memcpy((void*)&sb->buf[0], buf, buflen);
 	}
-	this->_mode = type;
 	_sendList.push(sb);
 	if (!_sending){
 		_sending = true;

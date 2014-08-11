@@ -8,7 +8,6 @@ iocp:start()
 local client = iocp:connect("127.0.0.1", 12345)
 iocp:recv(
 	function(id, itype, buf)
-	function(id, itype, buf)
 		print(buf)
 	end
 )

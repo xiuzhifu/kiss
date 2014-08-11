@@ -85,5 +85,10 @@ function iocpsocket:getaddr(fd)
 	return socketdriver.getsocketaddr(self.iocp,fd)
 end
 
+function iocpsocket:setsocketmode(fd, mode)
+	checkself(self)
+	socketdriver.setmode(self, fd, mode)
+end
+
 return iocpsocket
 
