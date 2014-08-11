@@ -1,0 +1,6 @@
+startfile = "main.lua"
+agentfile = "agent.lua"
+gatefile = "gate.lua"
+servercount = 5
+gateip = "127.0.0.1"
+gateport = 8001

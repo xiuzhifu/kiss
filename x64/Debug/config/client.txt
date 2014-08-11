@@ -1,0 +1,3 @@
+startfile = "client.lua"
+gateip = "127.0.0.1"
+gateport = 8001

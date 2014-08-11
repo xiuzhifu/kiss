@@ -1,0 +1,13 @@
+﻿生成启动时间为 2014/8/11 14:15:39。
+     1>项目“F:\快盘\server\lib\libiocpSocket\libiocpSocket.vcxproj”在节点 2 上(Rebuild 个目标)。
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt iocpSocket.cpp
+         iocpSocket.cpp
+       Lib:
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"F:\快盘\server\Debug\libiocpSocket.lib" /NOLOGO Debug\iocpSocket.obj
+         libiocpSocket.vcxproj -> F:\快盘\server\Debug\libiocpSocket.lib
+     1>已完成生成项目“F:\快盘\server\lib\libiocpSocket\libiocpSocket.vcxproj”(Rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:02.81

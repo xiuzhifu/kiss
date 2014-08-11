@@ -1,0 +1,38 @@
+package kissmessage;
+
+message LoginRequest
+{
+	required string username = 1;
+	required string password = 2;
+	required int32 id = 3;
+}
+
+message LoginResponse
+{
+	required string welcome = 1;
+}
+
+message Command
+{
+
+}
+
+message Request
+{
+	optional LoginRequest loginreq = 1;
+}
+
+message Response
+{
+	required bool result = 1;
+	optional LoginResponse loginrep = 5;
+}
+
+message Message
+{
+   required int32 id = 1;
+   optional Request request = 2;
+   optional Response response = 3;
+   optional Command  command = 4;
+}
+
