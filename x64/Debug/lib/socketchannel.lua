@@ -3,28 +3,28 @@ local  socketchannel = {
 	rsppoll = {}
 }
 
-function socketchannel:request(response, fd, ...)
+function socketchannel:request(response, fd, s)
  local co = coroutine.create(
 	function()
-		self.reqpoll[fd] = co
-		self:send(fd, ...)	
+		self.socket:sendraw(fd, s)	
 		while true do
-			local yp = coroutine.yield()
+			local yparam = coroutine.yield()
 			if response then
-				local ret, req = response(coroutine.yield())
+				local ret, req = response(fd, yparam)
 				if ret then
-					self:send(fd, req)
+					self.socket:sendraw(fd, req)
 				else 
 					self.reqpoll[fd] = nil
 					break 
 				end
 			else
-				rsppoll[fd] = yp
+				rsppoll[fd] = yparam
 				break
 			end
 		end
 	end
  )
+ 	self.reqpoll[fd] = co
 	coroutine.resume(co)
 end
 
@@ -35,7 +35,9 @@ function socketchannel:response(fd)
 	return false
 end
 
-function socketchannel:checkfd(fd, ... )
+function socketchannel:checkfd(fd, s)
 	if not self.reqpoll[fd] then return false end
-	coroutine.resume(self.reqpoll[fd], ...)
+	coroutine.resume(self.reqpoll[fd], s)
 end
+
+return socketchannel

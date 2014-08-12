@@ -17,10 +17,11 @@
 #define  DISCONNECT ~1
 #define MAX_CLIENT_BUFLEN 64 * 1024
 
+#define MESSAGE_TYPE_RAW 0
 #define MESSAGE_TYPE_DEFINE 1
 #define MESSAGE_TYPE_LUA 2
 #define MESSAGE_TYPE_PB 3
-#define MESSAGE_TYPE_RAW 4
+
 
 #include <winsock2.h>
 #include <mswsock.h>
@@ -66,7 +67,8 @@ class CustomSocketContext;
 		bool _sending;
 		char _recvbuf[MAX_CLIENT_BUFLEN];
 		int _recvbuflen;
-		unsigned long _lock;
+		unsigned long _recvlock;
+		unsigned long _sendlock;
 		void doRecv(const char * buf, const int buflen);
 	protected:
 		virtual int onRecv(const char * buf, const int buflen) = 0;
@@ -77,7 +79,8 @@ class CustomSocketContext;
 		{
 			socket = 0;
 			memset(&addr, 0, sizeof(addr));
-			_lock = 0;
+			_recvlock = 0;
+			_sendlock = 0;
 		}
 		CustomSocketContext(CustomIocpSocketServer *server){
 			_server = server;
@@ -87,7 +90,7 @@ class CustomSocketContext;
 			_mode = -1;
 		}
 		virtual ~CustomSocketContext(){ closeSocket();};
-		bool Send(const char * buf, uint16_t buflen, uint16_t type);
+		bool Send(const char * buf, uint16_t buflen, uint16_t type = -1);
 		void doSend(IoContext *ioctx);
 		int getId(){ return _id; }
 		char * getAddr() {return _addrs;}

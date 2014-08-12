@@ -28,7 +28,9 @@ bool CustomSocketContext::Send(const char * buf, uint16_t buflen, uint16_t type)
 		sb->buflen = buflen;
 		memcpy((void*)&sb->buf[0], buf, buflen);
 	}
+	LOCK(_sendlock)
 	_sendList.push(sb);
+	UNLOCK(_sendlock)
 	if (!_sending){
 		_sending = true;
 		_ioctx.reset();
@@ -39,7 +41,7 @@ bool CustomSocketContext::Send(const char * buf, uint16_t buflen, uint16_t type)
 }
 
 void CustomSocketContext::doSend(IoContext *ioctx){
-	
+	LOCK(_sendlock)
 	if (!_sendList.empty()){
 		SendBuffer * sb = _sendList.front();
 		_sendList.pop();
@@ -54,10 +56,11 @@ void CustomSocketContext::doSend(IoContext *ioctx){
 	else{
 		_sending = false;
 	}
+	UNLOCK(_sendlock)
 }
 
 void CustomSocketContext::doRecv(const char * buf, const int buflen){
-	LOCK(_lock);
+	LOCK(_recvlock);
 	if (buflen + _recvbuflen < MAX_CLIENT_BUFLEN)
 	{
 		memcpy(_recvbuf, buf, buflen);
@@ -73,7 +76,7 @@ void CustomSocketContext::doRecv(const char * buf, const int buflen){
 	//if (_recvbuflen < 0) {
 	//	int i = 100;
 	//}
-	UNLOCK(_lock); 
+	UNLOCK(_recvlock);
 }
 
 

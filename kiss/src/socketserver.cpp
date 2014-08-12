@@ -138,6 +138,13 @@ static int lsend(lua_State *L){
 		}
 		const char * buf;	
 		int len;
+		if (client->_mode == MESSAGE_TYPE_RAW){
+			if (num != 4) return 0;
+			buf = lua_tostring(L, 3);
+			len = (int)lua_tointeger(L, 4);
+			lua_pushboolean(L, client->Send(buf, len));
+			return 1;
+		}
 		uint8_t i;
 		int type = (int)lua_tointeger(L, 3);
 		switch (type){
@@ -155,11 +162,6 @@ static int lsend(lua_State *L){
 			case MESSAGE_TYPE_PB:  
 				if (num != 5) return 0;
 				buf = lua_tostring(L, 4); 
-				len = (int)lua_tointeger(L, 5);
-				break;
-			case MESSAGE_TYPE_RAW:
-				if (num != 5) return 0;
-				buf = lua_tostring(L, 4);
 				len = (int)lua_tointeger(L, 5);
 				break;
 			default:
@@ -254,7 +256,7 @@ static int londisconnect(lua_State * L){
 
 static int lsetmode(lua_State * L){
 	int num = lua_gettop(L);
-	if (num != 2) return 0;
+	if (num != 3) return 0;
 	IocpSocketServer * iocp = (IocpSocketServer *)lua_touserdata(L, 1);
 	int fd = (int)lua_tointeger(L, 2);
 	int mode = (int)lua_tointeger(L, 3);

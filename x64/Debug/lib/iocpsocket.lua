@@ -5,10 +5,10 @@ iocpsocket.__index = iocpsocket
 function checkself(self)
 	if not self then print("please call like iocpsocket:xxx style") end
 end
+iocpsocket.MESSAGE_TYPE_RAW = 0
 iocpsocket.MESSAGE_TYPE_DEFINE = 1
 iocpsocket.MESSAGE_TYPE_LUA = 2
 iocpsocket.MESSAGE_TYPE_PB = 3
-iocpsocket.MESSAGE_TYPE_RAW = 4
 iocpsocket.MODE_NORMOL = 1
 iocpsocket.MODE_RAW = 2
 iocpsocket.MODE_SUB = 3
@@ -55,6 +55,15 @@ function iocpsocket:send(fd, itype, s,...)
 	end
 end
 
+function iocpsocket:sendraw(fd,s)
+	checkself(self)
+	if s then
+		return socketdriver.send(self.iocp, fd, s, string.len(s))
+	else
+		return false
+	end
+end
+
 function iocpsocket:recv(callback)
 	checkself(self)
 	socketdriver.recv(self.iocp, callback)
@@ -87,7 +96,7 @@ end
 
 function iocpsocket:setsocketmode(fd, mode)
 	checkself(self)
-	socketdriver.setmode(self, fd, mode)
+	socketdriver.setmode(self.iocp, fd, mode)
 end
 
 return iocpsocket
