@@ -323,7 +323,7 @@ void Worker::doWork()
 {
 	DWORD dwBytesTransfered = 0;
 	CustomSocketContext *s = nullptr;
-	IoContext	*ioctx;
+	IoContext *ioctx;
 	ULONG_PTR key = NULL;
 	for(; ;)
 	{
